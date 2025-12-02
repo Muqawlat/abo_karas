@@ -1,29 +1,32 @@
-{{/* layouts/partials/hero.html - ULTIMATE ROBUST IMAGE FINDER */}}
+{{/* layouts/partials/hero.html - FINAL STABLE VERSION */}}
 
-{{/* البحث عن الصورة بالامتدادات المحتملة (المفضلة محلياً) */}}
-{{ $heroResource := resources.Get "images/hero.jpeg" }}
-{{ if not $heroResource }}
-  {{ $heroResource = resources.Get "images/hero.jpg" }}
+{{ $imageFound := false }}
+{{ $imageURL := "" }}
+{{ $imageWidth := 1200 }}
+{{ $imageHeight := 800 }}
+
+{{/* 1. المحاولة الأولى: العثور على الصورة المحلية (hero.jpeg أو hero.jpg) */}}
+{{ $localResource := resources.Get "images/hero.jpeg" }}
+{{ if not $localResource }}
+  {{ $localResource = resources.Get "images/hero.jpg" }}
 {{ end }}
-{{ if not $heroResource }}
-  {{ $heroResource = resources.Get "images/hero.png" }}
-{{ end }}
 
-{{ $webp := false }}
-{{ $meta := dict "width" 600 "height" 400 }}
-{{ $isLocal := false }}
-
-{{ with $heroResource }}
-  {{/* 1. الصورة المحلية موجودة: نقوم بتحويلها وتحديد أبعادها */}}
-  {{ $isLocal = true }}
+{{ with $localResource }}
+  {{/* إذا تم العثور على الصورة المحلية، قم بتحويلها إلى WebP */}}
+  {{ $imageFound = true }}
   {{ $resized := .Fill "1200x800 center" }}
-  {{ $webp = $resized | resources.Convert "webp" }}
-  {{ $meta = dict "width" $webp.Width "height" $webp.Height }}
-{{ else }}
-  {{/* 2. الصورة غير موجودة محلياً: نستخدم صورة Placeholder خارجية (PNG/JPG) دون تحويلها */}}
-  {{ $webp = resources.GetRemote "https://placehold.co/1200x800/eeeeee/333333/png?text=MISSING+HERO+IMAGE" }}
-  {{ $meta = dict "width" 1200 "height" 800 }} /* نحدد الأبعاد يدوياً للـ CLS */
+  {{ $webpResource := $resized | resources.Convert "webp" }}
+  {{ $imageURL = $webpResource.RelPermalink }}
+  {{ $imageWidth = $webpResource.Width }}
+  {{ $imageHeight = $webpResource.Height }}
 {{ end }}
+
+{{/* 2. إذا لم يتم العثور على الصورة المحلية، استخدم Placeholder */}}
+{{ if not $imageFound }}
+  {{ $remoteResource := resources.GetRemote "https://placehold.co/1200x800/eeeeee/333333/png?text=UPLOAD+YOUR+HERO+IMAGE" }}
+  {{ $imageURL = $remoteResource.RelPermalink }}
+{{ end }}
+
 
 <section class="hero" aria-label="Hero - {{ .Site.Params.company_name }}">
   <div class="container">
@@ -46,15 +49,13 @@
       </div>
     </div>
 
-    {{ with $webp }}
     <div class="visual" aria-hidden="true">
       <img
         loading="eager"
-        src="{{ .RelPermalink }}"
-        width="{{ $meta.width }}"
-        height="{{ $meta.height }}"
+        src="{{ $imageURL }}"
+        width="{{ $imageWidth }}"
+        height="{{ $imageHeight }}"
         alt="أعمال مقاولات احترافية — {{ $.Site.Params.company_name }}">
     </div>
-    {{ end }}
   </div>
 </section>
