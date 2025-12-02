@@ -1,0 +1,57 @@
+{{/* Floating CTA button (fixed bottom-right) */}}
+{{ $phone := .Site.Params.phone | default "" }}
+{{ $phone_clean := replaceRE `[^+\d]` "" $phone }}
+<style>
+  .cta-float {
+    position: fixed;
+    right: 20px;
+    bottom: 22px;
+    z-index: 9999;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    pointer-events: auto;
+  }
+  .cta-float .circle {
+    width:64px;
+    height:64px;
+    border-radius:999px;
+    background: var(--main-color);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow: 0 10px 28px rgba(11,61,145,0.18);
+    transition: transform .18s ease;
+  }
+  .cta-float .circle:active { transform: scale(.95); }
+  .cta-float .label {
+    background: #fff;
+    border-radius: 12px;
+    padding: 10px 12px;
+    box-shadow: 0 6px 20px rgba(15,23,42,0.06);
+    display:none;
+    align-items:center;
+    gap:8px;
+    min-width:140px;
+  }
+  @media (min-width:900px) {
+    .cta-float .label { display:flex; }
+  }
+  .cta-float a { text-decoration:none; color:inherit; }
+  .cta-float .phone { font-weight:700; color:#0f172a; font-size:14px; }
+  .cta-float .txt { color:#6b7280; font-size:13px; }
+</style>
+
+<div class="cta-float" role="complementary" aria-label="زر الاتصال السريع">
+  <a class="label" href="tel:{{ $phone_clean }}">
+    <div style="display:flex;flex-direction:column;">
+      <span class="phone">{{ .Site.Params.phone }}</span>
+      <span class="txt">اتصل بنا الآن</span>
+    </div>
+  </a>
+  <a class="circle" href="tel:{{ $phone_clean }}" aria-label="اتصال سريع">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+      <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1C9.61 21 3 14.39 3 6a1 1 0 011-1h3.5a1 1 0 011 1c0 1.24.2 2.45.57 3.57a1 1 0 01-.24 1.01l-2.21 2.21z" fill="#fff"/>
+    </svg>
+  </a>
+</div>
