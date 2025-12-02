@@ -1,21 +1,24 @@
-{{/* Hero partial - includes H1 (SEO) and processed background image as <img> (WebP via Hugo Pipes) */}}
-{{ $heroResource := .Resources.GetMatch "images/hero.*" }}
+{{/* layouts/partials/hero.html - Ultra-Robust Image Finder */}}
+
+{{/* البحث عن الصورة بالامتداد الذي استخدمته (.jpeg) */}}
+{{ $heroResource := resources.Get "images/hero.jpeg" }}
+
 {{ if not $heroResource }}
-  {{/* Fallback to assets/images/hero.jpg if not a page bundle */}}
-  {{ $heroResource = resources.Get "images/hero.jpeg" }}
+  {{/* إذا لم يتم العثور على .jpeg، نجرب الامتداد الشائع (.jpg) */}}
+  {{ $heroResource = resources.Get "images/hero.jpg" }}
 {{ end }}
 
 {{ $webp := false }}
 {{ $meta := dict "width" 600 "height" 400 }}
 
 {{ with $heroResource }}
-  {{/* إذا تم العثور على الصورة، قم بمعالجتها */}}
+  {{/* الصورة موجودة: نقوم بمعالجتها وتحديد أبعادها */}}
   {{ $resized := .Fill "1200x800 center" }}
   {{ $webp = $resized | resources.Convert "webp" }}
   {{ $meta = dict "width" $webp.Width "height" $webp.Height }}
 {{ else }}
-  {{/* إذا لم يتم العثور على الصورة، سنستخدم صورة احتياطية مؤقتة (PlaceKitten) لتجنب الانهيار */}}
-  {{ $webp = resources.GetRemote "https://placehold.co/1200x800/eeeeee/333333/webp?text=MISSING+HERO+IMAGE" }}
+  {{/* الصورة غير موجودة: نستخدم صورة Placeholder مؤقتة (لتحذيرك وتجنب الانهيار) */}}
+  {{ $webp = resources.GetRemote "https://placehold.co/1200x800/eeeeee/333333/webp?text=IMAGE+FILE+NOT+FOUND" }}
 {{ end }}
 
 <section class="hero" aria-label="Hero - {{ .Site.Params.company_name }}">
