@@ -5,9 +5,18 @@
   {{ $heroResource = resources.Get "images/hero.jpg" }}
 {{ end }}
 
-{{ $resized := $heroResource.Fill "1200x800 center" }}
-{{ $webp := $resized | resources.Convert "webp" }}
-{{ $meta := dict "width" $webp.Width "height" $webp.Height }}
+{{ $webp := false }}
+{{ $meta := dict "width" 600 "height" 400 }}
+
+{{ with $heroResource }}
+  {{/* إذا تم العثور على الصورة، قم بمعالجتها */}}
+  {{ $resized := .Fill "1200x800 center" }}
+  {{ $webp = $resized | resources.Convert "webp" }}
+  {{ $meta = dict "width" $webp.Width "height" $webp.Height }}
+{{ else }}
+  {{/* إذا لم يتم العثور على الصورة، سنستخدم صورة احتياطية مؤقتة (PlaceKitten) لتجنب الانهيار */}}
+  {{ $webp = resources.GetRemote "https://placehold.co/1200x800/eeeeee/333333/webp?text=MISSING+HERO+IMAGE" }}
+{{ end }}
 
 <section class="hero" aria-label="Hero - {{ .Site.Params.company_name }}">
   <div class="container">
