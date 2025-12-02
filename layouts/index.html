@@ -1,0 +1,20 @@
+{{/* Root index controller */}}
+<!doctype html>
+<html lang="ar">
+  {{ partial "head.html" . }}
+  <body>
+    {{ partial "hero.html" . }}
+    {{ partial "services.html" . }}
+    <footer class="container site-footer">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;">
+        <div>
+          <strong>{{ .Site.Params.company_name }}</strong>
+          <div class="small">{{ .Site.Params.address }}</div>
+        </div>
+        <div class="small">هاتف: {{ .Site.Params.phone }}</div>
+      </div>
+    </footer>
+
+    {{ partial "cta_float.html" . }}
+  </body>
+</html>
