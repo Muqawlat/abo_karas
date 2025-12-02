@@ -27,9 +27,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700;800&display=swap" rel="stylesheet">
 
-  {{/* LocalBusiness JSON-LD Schema */}}
+  {{/* LocalBusiness JSON-LD Schema (Updated Data) */}}
   {{ $phone := .Site.Params.phone | default "" }}
-  {{ $phone_clean := replaceRE `[^+\d]` "" $phone }}
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
