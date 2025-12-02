@@ -1,0 +1,58 @@
+{{/* layouts/partials/head.html */}}
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>{{ .Site.Title }}</title>
+  <meta name="description" content="{{ with .Site.Params.tagline }}{{ . }}{{ end }}">
+  <meta name="author" content="{{ .Site.Params.company_name }}">
+  <link rel="canonical" href="{{ .Permalink }}">
+
+  {{/* Critical CSS inlined for fastest first paint (keeps small) */}}
+  <style>
+    :root{--main-color:{{ .Site.Params.main_color }};--accent-color:{{ .Site.Params.accent_color }};--font-sans: "Noto Naskh Arabic", "Arial", sans-serif}
+    html,body{margin:0;padding:0;font-family:var(--font-sans);background:#fff;color:#111;direction:rtl}
+    .hero{display:flex;gap:24px;align-items:center;padding:36px 0;max-width:1100px;margin:0 auto}
+    .h1{font-size:36px;color:var(--main-color);margin:0 0 10px;font-weight:800}
+    .btn{display:inline-flex;padding:12px 18px;border-radius:999px;text-decoration:none}
+    .btn-primary{background:var(--main-color);color:#fff}
+  </style>
+
+  {{/* Main CSS compile via Hugo Pipes (toCSS + minify + fingerprint) */}}
+  {{ $styles := resources.Get "scss/main.scss" | toCSS (dict "targetPath" "css/main.css") | postCSS | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $styles.RelPermalink }}" integrity="{{ $styles.Data.Integrity }}">
+
+  {{/* Preconnect for fonts if needed (optional) */}}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700;800&display=swap" rel="stylesheet">
+
+  {{/* LocalBusiness JSON-LD Schema */}}
+  {{ $phone := .Site.Params.phone | default "" }}
+  {{ $phone_clean := replaceRE `[^+\d]` "" $phone }}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "{{ .Site.Params.company_name }}",
+    "telephone": "{{ $phone }}",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "{{ .Site.Params.address }}",
+      "addressLocality": "مدينة الكويت",
+      "addressCountry": "KW"
+    },
+    "url": "{{ .Site.BaseURL }}",
+    "logo": "{{ .Site.BaseURL }}images/logo.png",
+    "description": "{{ .Site.Params.tagline }}",
+    "priceRange": "$$$",
+    "openingHours": "Mo,Tu,We,Th,Fr 08:00-18:00",
+    "image": "{{ .Site.BaseURL }}images/hero.jpg",
+    "sameAs": [],
+    "serviceType": "GeneralContractor"
+  }
+  </script>
+
+  {{/* Basic favicons (user can replace) */}}
+  <link rel="icon" href="/favicon.ico" />
+</head>
