@@ -1,7 +1,7 @@
 baseURL = "https://muqawlat.github.io/abo_karas/"
 languageCode = "ar"
 title = "أفضل شركة مقاولات في الكويت | أبو كاراس"
-theme = "your-theme-name" # يمكنك تركها كما هي
+#theme = "your-theme-name" # يمكنك تركها كما هي
 # Use this as central params object:
 [params]
   company_name = "مقاولات أبو كاراس"
