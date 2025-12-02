@@ -1,24 +1,28 @@
-{{/* layouts/partials/hero.html - Ultra-Robust Image Finder */}}
+{{/* layouts/partials/hero.html - ULTIMATE ROBUST IMAGE FINDER */}}
 
-{{/* البحث عن الصورة بالامتداد الذي استخدمته (.jpeg) */}}
+{{/* البحث عن الصورة بالامتدادات المحتملة (المفضلة محلياً) */}}
 {{ $heroResource := resources.Get "images/hero.jpeg" }}
-
 {{ if not $heroResource }}
-  {{/* إذا لم يتم العثور على .jpeg، نجرب الامتداد الشائع (.jpg) */}}
   {{ $heroResource = resources.Get "images/hero.jpg" }}
+{{ end }}
+{{ if not $heroResource }}
+  {{ $heroResource = resources.Get "images/hero.png" }}
 {{ end }}
 
 {{ $webp := false }}
 {{ $meta := dict "width" 600 "height" 400 }}
+{{ $isLocal := false }}
 
 {{ with $heroResource }}
-  {{/* الصورة موجودة: نقوم بمعالجتها وتحديد أبعادها */}}
+  {{/* 1. الصورة المحلية موجودة: نقوم بتحويلها وتحديد أبعادها */}}
+  {{ $isLocal = true }}
   {{ $resized := .Fill "1200x800 center" }}
   {{ $webp = $resized | resources.Convert "webp" }}
   {{ $meta = dict "width" $webp.Width "height" $webp.Height }}
 {{ else }}
-  {{/* الصورة غير موجودة: نستخدم صورة Placeholder مؤقتة (لتحذيرك وتجنب الانهيار) */}}
-  {{ $webp = resources.GetRemote "https://placehold.co/1200x800/eeeeee/333333/webp?text=IMAGE+FILE+NOT+FOUND" }}
+  {{/* 2. الصورة غير موجودة محلياً: نستخدم صورة Placeholder خارجية (PNG/JPG) دون تحويلها */}}
+  {{ $webp = resources.GetRemote "https://placehold.co/1200x800/eeeeee/333333/png?text=MISSING+HERO+IMAGE" }}
+  {{ $meta = dict "width" 1200 "height" 800 }} /* نحدد الأبعاد يدوياً للـ CLS */
 {{ end }}
 
 <section class="hero" aria-label="Hero - {{ .Site.Params.company_name }}">
