@@ -22,7 +22,7 @@ jobs:
       - name: Setup Hugo Extended
         uses: peaceiris/actions-hugo@v2
         with:
-          hugo-version: '0.116.0'   # عدّل إن أردت؛ تأكد من توافق الإصدار
+          hugo-version: '0.116.0'
           extended: true
 
       - name: Setup Node (for possible asset tooling cache)
@@ -49,5 +49,4 @@ jobs:
         with:
           publish_dir: ./public
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          # commit message
           commit_message: "ci: build & deploy site (Hugo)"
