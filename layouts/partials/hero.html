@@ -2,7 +2,7 @@
 {{ $heroResource := .Resources.GetMatch "images/hero.*" }}
 {{ if not $heroResource }}
   {{/* Fallback to assets/images/hero.jpg if not a page bundle */}}
-  {{ $heroResource = resources.Get "images/hero.jpg" }}
+  {{ $heroResource = resources.Get "images/hero.jpeg" }}
 {{ end }}
 
 {{ $webp := false }}
