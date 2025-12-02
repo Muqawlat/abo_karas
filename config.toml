@@ -1,0 +1,13 @@
+baseURL = "https://muqawlat.github.io/abo_karas/"
+languageCode = "ar"
+title = "أفضل شركة مقاولات في الكويت | [اسم الشركة]"
+theme = "your-theme-name" # (إن أردت تغيير اسم الثيم)
+# Use this as central params object:
+[params]
+  company_name = "[اسم الشركة]"
+  phone = "+965 [رقم الهاتف]"
+  address = "مدينة الكويت، [العنوان التفصيلي]"
+  services_keywords = ["مقاولات عامة", "بناء فلل", "تشطيبات"]
+  main_color = "#0B3D91"    # أزرق غامق مؤسسي (يمكن تغييره)
+  accent_color = "#6B7280"  # رمادي
+  tagline = "تنفيذ مشاريع المقاولات بجودة وموثوقية في الكويت"
