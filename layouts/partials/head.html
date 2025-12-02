@@ -19,7 +19,8 @@
   </style>
 
   {{/* Main CSS compile via Hugo Pipes (toCSS + minify + fingerprint) */}}
-  {{ $styles := resources.Get "scss/main.scss" | toCSS (dict "targetPath" "css/main.css") | postCSS | minify | fingerprint }}
+  {{/* تم حذف | postCSS | لحل مشكلة 'npx' */}}
+  {{ $styles := resources.Get "scss/main.scss" | toCSS (dict "targetPath" "css/main.css") | minify | fingerprint }}
   <link rel="stylesheet" href="{{ $styles.RelPermalink }}" integrity="{{ $styles.Data.Integrity }}">
 
   {{/* Preconnect for fonts if needed (optional) */}}
