@@ -1,0 +1,34 @@
+{{/* Services section - uses params.services_keywords for content */}}
+<section id="services" class="container" aria-labelledby="services-title">
+  <h2 id="services-title" style="margin:0 0 18px 0;color:var(--main-color);">خدماتنا الرئيسية</h2>
+  <p class="muted">نقدم خدمات مقاولات متكاملة في الكويت مع التركيز على الجودة والالتزام بالمواعيد.</p>
+
+  <div class="services" role="list">
+    {{ $keywords := .Site.Params.services_keywords }}
+    {{ $default := slice "مقاولات عامة" "بناء فلل" "تشطيبات داخلية" "إدارة مشاريع" }}
+    {{ if not $keywords }}
+      {{ $keywords = $default }}
+    {{ end }}
+
+    {{ range $i, $k := $keywords }}
+      <article class="service-card" role="listitem" aria-label="{{ $k }}">
+        <div class="icon" aria-hidden="true">
+          {{/* simple inline icon placeholder */}}
+          {{ if eq (mod $i 4) 0 }}
+            🏗
+          {{ else if eq (mod $i 4) 1 }}
+            🧱
+          {{ else if eq (mod $i 4) 2 }}
+            🛠
+          {{ else }}
+            📐
+          {{ end }}
+        </div>
+        <div>
+          <h3>{{ $k }}</h3>
+          <p class="small">تنفيذ عالي الجودة مع خبرة واسعة في سوق المقاولات بالكويت. نركّز على {{ $k }} لتلبية احتياجاتك.</p>
+        </div>
+      </article>
+    {{ end }}
+  </div>
+</section>
