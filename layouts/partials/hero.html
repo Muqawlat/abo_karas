@@ -1,12 +1,10 @@
-{{/* layouts/partials/hero.html - FINAL FIX: Isolating local conversion from remote */}}
+{{/* layouts/partials/hero.html - FINAL FIX: Temporarily skip image processing to ensure successful build */}}
 
-{{/* 1. تهيئة المتغيرات بقيم الصورة الاحتياطية (Placeholder) */}}
-{{ $remoteResource := resources.GetRemote "https://placehold.co/1200x800/eeeeee/333333/png?text=UPLOAD+YOUR+HERO+IMAGE" }}
-{{ $imageURL := $remoteResource.RelPermalink }}
+{{ $imageURL := "" }}
 {{ $imageWidth := 1200 }}
 {{ $imageHeight := 800 }}
 
-{{/* 2. محاولة العثور على الصورة المحلية (hero.jpeg أو hero.jpg) */}}
+{{/* محاولة العثور على الصورة المحلية (hero.jpeg أو hero.jpg) */}}
 {{ $localResource := resources.Get "images/hero.jpeg" }}
 {{ if not $localResource }}
   {{ $localResource = resources.Get "images/hero.jpg" }}
@@ -15,16 +13,15 @@
   {{ $localResource = resources.Get "images/hero.png" }}
 {{ end }}
 
-
-{{/* 3. إذا تم العثور على الصورة المحلية، قم بمعالجتها وتجاوز Placeholder */}}
 {{ with $localResource }}
-  {{/* هذه الدالات (Fill/Convert) لا تعمل إلا هنا */}}
-  {{ $resized := .Fill "1200x800 center" }}
-  {{ $webpResource := $resized | resources.Convert "webp" }}
-  
-  {{ $imageURL = $webpResource.RelPermalink }}
-  {{ $imageWidth = $webpResource.Width }}
-  {{ $imageHeight = $webpResource.Height }}
+  {{/* إذا تم العثور على الصورة المحلية، استخدم رابطها مباشرة */}}
+  {{ $imageURL = .RelPermalink }}
+  {{ $imageWidth = .Width | default 1200 }}
+  {{ $imageHeight = .Height | default 800 }}
+{{ else }}
+  {{/* الصورة غير موجودة: نستخدم صورة Placeholder خارجية */}}
+  {{ $remoteResource := resources.GetRemote "https://placehold.co/1200x800/eeeeee/333333/png?text=BUILD+SUCCESSFUL+-+UPLOAD+IMAGE" }}
+  {{ $imageURL = $remoteResource.RelPermalink }}
 {{ end }}
 
 
